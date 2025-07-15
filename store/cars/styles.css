@@ -1,0 +1,311 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body { font-family: 'LEMONMILK-Regular', 'Roboto', sans-serif; }
+
+@font-face{font-family:'LEMONMILK-Regular';src:url('../../../LEMONMILK-Regular.otf') format('opentype');font-display:swap;}
+
+
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.2s;
+  user-select: none;
+}
+
+p {
+  font-size: 14px;
+  font-weight: 600;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  user-select: none;
+}
+
+.container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #eeeeee;
+}
+
+.car{
+  position: absolute;
+  top: 50%;
+  left: 20%;
+  transform: translate(-50%, -50%);
+  max-width: 480px;
+  height: fit-content;
+  gap: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 3;
+
+}
+.car-details {
+  padding: 1.5em;
+  background-color: #111;
+  color: #eee;
+  border: 4px solid #eee;
+  box-shadow: 0 0 0 2px #000000;
+  backdrop-filter: blur(8px);
+  border-radius: 0px;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 1s ease-in-out 0.5s;
+  pointer-events: none;
+  transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+}
+.car-details:hover {
+  background-color: #eee;
+  color: #111;
+}
+.car-details:hover .car-highlight {
+  color: #111;
+}
+
+.car a{ width: 100%; text-decoration: none; }
+
+.car-order {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: fit-content;
+  padding: .5em;
+  background-color: #111;
+  color: #eee;
+  border: 4px solid #eee;
+  box-shadow: 0 0 0 2px #000000;
+  backdrop-filter: blur(8px);
+  border-radius: 0px;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: revealButton 1s ease-in-out forwards;
+  animation-delay: 0.5s;
+  transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+}
+@keyframes revealButton {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.car-order:hover {
+  background-color: #eee;
+  color: #111;
+}
+.wa { color: #eee; transition: color 0.3s ease-in-out; }
+.car-order:hover .wa{ color: #111; }
+
+.car-details.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+}
+
+.car-details h1 {
+  font-size: 2em;
+  margin-bottom: 0.25em;
+  font-weight: 700;
+}
+
+.car-details .car-year,
+.car-details .car-price {
+  font-size: 1em;
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+.car-details .car-specs {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 1em;
+  line-height: 1.6em;
+}
+
+.car-details .car-highlight {
+  margin-top: 1.2em;
+  font-style: italic;
+  color: #eee;
+  transition: color 0.3s ease-in-out;
+}
+
+
+.img-preview {
+  position: absolute;
+  top: 50%;
+  left: 60%;
+  transform: translate(-50%, -50%);
+  width: 50%;
+  height: 75%;
+  overflow: hidden;
+  z-index: 2;
+}
+
+.img-preview img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.minimap {
+  position: absolute;
+  top: 50%;
+  right: 8em;
+  width: 80px;
+}
+
+.indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  border: 1px solid #000;
+  z-index: 2;
+}
+
+.items {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  will-change: transform;
+}
+
+.item {
+  width: 100%;
+  height: 60px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  body {
+    overflow: hidden;
+    touch-action: none;
+  }
+
+  .container {
+    touch-action: none;
+  }
+
+  .site-info {
+    top: 1.5em;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .minimap {
+    top: auto;
+    right: auto;
+    bottom: 5em;
+    left: 50%;
+    width: auto;
+    height: 80px;
+    touch-action: none;
+  }
+
+  .indicator {
+    top: 0;
+    left: 0;
+    width: 60px;
+    height: 100%;
+  }
+
+  .items {
+    flex-direction: row;
+    width: max-content;
+    height: 100%;
+    touch-action: none;
+  }
+
+  .item {
+    width: 60px;
+    height: 100%;
+    padding: 5px;
+  }
+
+  .img-preview {
+    top: 45%;
+    width: 75%;
+    height: 50%;
+  }
+}
+
+.container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url('https://grainy-gradients.vercel.app/noise.svg') repeat;
+  mix-blend-mode: overlay;
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.img-preview img {
+  mix-blend-mode: multiply;
+  filter: contrast(1.2) brightness(1.05);
+  transition: transform 0.6s ease;
+}
+
+body::before {animation:grain 8s steps(10) infinite;background-image:url(../../assets/noise.png);content:'';height:300%;left:-50%;opacity:1;position:fixed;top:-100%;width:300%;z-index: 1;}
+@keyframes grain {0%,100%{transform:translate(0,0);}10%{transform:translate(-5%,-10%);}20%{transform:translate(-15%,5%);}30%{transform:translate(7%,-25%);}40%{transform:translate(-5%,25%);}50%{transform:translate(-15%,10%);}60%{transform:translate(15%,0%);}70%{transform:translate(0%,15%);}80%{transform:translate(3%,35%);}90%{transform:translate(-10%,10%);}}
+
+@media (max-width:500px) {
+
+.car{
+  position: absolute;
+  top: 33%;
+  left: 50%;
+  max-width: 400px;
+  gap: 10px;
+}
+  .car-details {
+  height:fit-content;
+  width: 350px;
+  padding: .5em;
+  border: 4px solid #eee;
+}
+.car-order {
+  border: 4px solid #eee;
+  padding: .2em;
+  animation-delay: 0.5s;
+  transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+}
+.model-name {font-size: 1em;}
+.img-preview {
+  top: 70%;
+  left: 50%;
+  width: 75%;
+  height: 33%;   
+}
+.minimap {
+  top: auto;
+  right: auto;
+  bottom: 3em;
+  left: 50%;
+  touch-action: none;
+}
+.car-details h1 {
+  font-size: 1em;
+}
+.img-preview img {
+  top: 55%;
+}
+}
