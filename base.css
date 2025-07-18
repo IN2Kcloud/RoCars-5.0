@@ -36,6 +36,8 @@ body::before { content: ''; position: fixed; top: -100%; left: -50%; width: 300%
   z-index: 10;
   pointer-events: none;
   mix-blend-mode: difference;
+  opacity: 1;
+  transition: opacity 0.5s ease;
 }
 
 .logo-glitch-wrapper {
@@ -133,6 +135,9 @@ body::before { content: ''; position: fixed; top: -100%; left: -50%; width: 300%
 .tv-wrapper:hover ~ .video-glitch-wrapper {
   opacity: 0.33;
 }
+.tv-wrapper:hover ~ #LPtextCanvas {
+  opacity: 0;
+}
 
 /* MENU MENU MENU */
 @font-face{font-family:'LEMONMILK-Regular';src:url('./assets/LEMONMILK-Regular.otf') format('opentype');font-display:swap;}
@@ -204,7 +209,17 @@ body::before { content: ''; position: fixed; top: -100%; left: -50%; width: 300%
 a {text-decoration:none;color:#111;outline:none;}
 a:hover,a:focus {color:#000;outline:none;}
 
-@media (max-width:500px) {.marquee span,.menu__item-link {font-size:5vw;line-height:2;}.logo a,.menu-logo a {font-size:44px;}.col-2 {position:absolute;width:100%;}.header h1 {font-size:66px;height:120px;}.socials {gap:4em;flex-direction:row;}.header {left:50%;transform:translateX(-50%);width:300px;bottom:15vw;}.video-wrapper {width:333px;}}
+@media (max-width:500px) {
+  .marquee span,.menu__item-link {font-size:5vw;line-height:2;}
+  .logo a,.menu-logo a {font-size:44px;}
+  .col-2 {position:absolute;width:100%;}
+  .header {left:50%;transform:translateX(-50%);width:300px;bottom:15vw;}
+  .header h1 {font-size:66px;height:120px;}
+  .socials {gap:4em;flex-direction:row;}
+  .video-wrapper {width:333px;}
+  .video-glitch-wrapper { width: 90vw; aspect-ratio: 9/16; top: 45%;}
+}
+
 @media only screen and (max-device-width: 500px){
 	.tv-window { width: 300px; /*left: 50%; transform: translateX(-50%); */}
 }
