@@ -16,7 +16,6 @@
 	<link rel="stylesheet" href="base.css">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
   <script type="module" src="https://unpkg.com/three@0.160.0/build/three.module.js"></script>
-
 </head>
 <body class="before-load">
 	  <div class="loading">
@@ -25,23 +24,18 @@
       </div>
     </div>
 
-    <canvas id="LPtextCanvas"></canvas>
-
     <svg style="position: absolute; width: 0; height: 0;">
-  <filter id="goo-3">
-    <feGaussianBlur in="SourceGraphic" stdDeviation="0" result="blur" />
-    <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  
-                                                     0 1 0 0 0  
-                                                     1 0 1 0 0  
-                                                     0 0 0 15 -8" result="goo" />
-    <feTurbulence type="fractalNoise" baseFrequency="0.1 0.5" numOctaves="5" seed="2" result="noise" />
-    <feDisplacementMap in="goo" in2="noise" scale="0" result="displacement" />
-    <feComposite in="SourceGraphic" in2="displacement" operator="atop" />
-  </filter>
-</svg>
-
-<h2 id="glitchText" data-filter="goo-3" class="glitchy-text">ROCARS</h2>
-
+      <filter id="goo-3">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="0" result="blur" />
+        <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  
+                                                         0 1 0 0 0  
+                                                         1 0 1 0 0  
+                                                         0 0 0 15 -8" result="goo" />
+        <feTurbulence type="fractalNoise" baseFrequency="0.1 0.5" numOctaves="5" seed="2" result="noise" />
+        <feDisplacementMap in="goo" in2="noise" scale="0" result="displacement" />
+        <feComposite in="SourceGraphic" in2="displacement" operator="atop" />
+      </filter>
+    </svg>
 
 	  <div class="logo-glitch-wrapper">
       <img src="./assets/RoCarsO.png" class="logo-base" alt="Logo">
@@ -58,6 +52,8 @@
         </div>
       </div>
     </div>
+
+    <canvas id="LPtextCanvas"></canvas>
 
     <div class="video-glitch-wrapper">
       <video autoplay muted loop playsinline>
@@ -272,7 +268,5 @@
 
   <script src="https://unpkg.com/gsap@3.12.2/dist/gsap.min.js"></script>
 
-  
-    
 </body>
 </html>
