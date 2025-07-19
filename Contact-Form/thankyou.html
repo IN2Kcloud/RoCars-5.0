@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Thank You</title>
   <style>
-    a {text-decoration: none;}
+    a {text-decoration: none; color: #111;}
     @font-face{font-family:'LEMONMILK-Regular'; src:url('../../assets/LEMONMILK-Regular.otf') format('opentype');font-display:swap;}
 
     body {
@@ -27,7 +27,12 @@
     .mainp{color: #eee;}
     .mainp::before{content:'';position:absolute;z-index:-1;top:0%;bottom:0%;left:-0.25em;right:-0.25em;background-color:#000000;border:2px solid #eee; transform:scaleX(1);transform-origin:center center; transition:transform 0.5s ease-in-out; filter:url(#pDistort);}
 
-    .subp {font-size: 2rem;}
+    .subp {font-size: 2rem; /*-webkit-text-stroke: 1px #eee;*/}
+
+    .backp {position: relative; width: fit-content; position: absolute; top: 90%; left: 50%; transform: translate(-50%, -50%); font-size: 3rem; cursor: pointer;}
+    .backp::before{content:'';position:absolute;z-index:1;top:33%;bottom:33%;left:-0.25em;right:-0.25em;background-color:#eee;border:2px solid #000;transform-origin:center right;transform:scaleX(0);transition:transform 0.5s ease-in-out; filter:url(#pDistort);}
+    .backp:hover::before{transform:scaleX(1);transform-origin:center left;}
+
 
   </style>
 </head>
@@ -35,6 +40,7 @@
     <div>
         <p class="mainp">Your message just made it <br> to RoCars HQ.</p>
         <p class="subp">Sit tight — one of our specialists <br> will be in touch soon. 🏁</p>
+        <a href="./index.html"><p class="backp">BACK!</p></a>
     </div>
     <svg style="display: none;">
         <defs>

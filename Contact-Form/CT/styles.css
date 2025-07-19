@@ -209,7 +209,7 @@ form label {
 }
 form label::before{content:'';position:absolute;z-index:-1;top:0%;bottom:0%;left:-0.25em;right:-0.25em;background-color:#000000;border:2px solid #eee; transform:scaleX(1);transform-origin:center center; transition:transform 0.5s ease-in-out; filter:url(#pDistort);}
 
-input[type="text"] {
+input[type="text"], input[type="email"] {
   width: 28vw;
   outline: none;
   background: none;
@@ -224,7 +224,7 @@ input[type="text"] {
   line-height: 1.4;
 }
 
-textarea#Message {
+textarea#message {
   width: 28vw;
   height: 100px;
   outline: none;
