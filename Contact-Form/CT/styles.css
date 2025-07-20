@@ -318,7 +318,7 @@ form button:hover::before{transform:scaleX(1);transform-origin:center left;}
     width: 88vw;
   }
   
-  textarea#Message {
+  textarea#message {
     width: 88vw;
   }
 
