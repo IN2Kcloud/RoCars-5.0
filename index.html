@@ -20,7 +20,7 @@
 <body class="before-load">
 	  <div class="loading">
       <div class="loading-circle">
-      <img src="./assets/Loader.gif" alt="RC Loading">
+      <p class="backp">ROCARS !</p>
       </div>
     </div>
 
@@ -28,9 +28,9 @@
       <filter id="goo-3">
         <feGaussianBlur in="SourceGraphic" stdDeviation="0" result="blur" />
         <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  
-                                                         0 1 0 0 0  
-                                                         1 0 1 0 0  
-                                                         0 0 0 15 -8" result="goo" />
+                                                       0 1 0 0 0  
+                                                       1 0 1 0 0  
+                                                       0 0 0 15 -8" result="goo" />
         <feTurbulence type="fractalNoise" baseFrequency="0.1 0.5" numOctaves="5" seed="2" result="noise" />
         <feDisplacementMap in="goo" in2="noise" scale="0" result="displacement" />
         <feComposite in="SourceGraphic" in2="displacement" operator="atop" />
@@ -268,5 +268,7 @@
 
   <script src="https://unpkg.com/gsap@3.12.2/dist/gsap.min.js"></script>
 
+  
+    
 </body>
 </html>
