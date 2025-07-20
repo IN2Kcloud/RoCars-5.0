@@ -321,4 +321,8 @@ form button:hover::before{transform:scaleX(1);transform-origin:center left;}
   textarea#Message {
     width: 88vw;
   }
+
+  input[type="text"], input[type="email"] {
+  width: 88vw;
+  }
 }
