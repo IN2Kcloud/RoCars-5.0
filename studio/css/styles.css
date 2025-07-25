@@ -119,5 +119,7 @@ a{text-decoration:none;color:var(--color-link);outline:none;}a:hover{color:#ffa6
     .main { height: 33vh;}
     .menu__item { font-size: 1.5rem; }
     .menu__item:nth-child(even) { font-weight: 100; color: #eee;}
+    .content__text { font-size: .75rem; }
+
     .inversion-lens { height: 33vh;}
 }
