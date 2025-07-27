@@ -110,7 +110,7 @@ main {
 
 .PLAY { position: relative; display: inline-block; font-size: 4rem; font-weight: bold; color: #000; text-decoration: none; overflow: hidden; }
 /*.PLAY::before { content: ''; position: absolute; z-index: 1; top: 33%; bottom: 33%; left: -0.25em; right: -0.25em; background-color: #ffa666; border: 3px solid #000; filter: url(#pDistort); animation: fullSweep 2s ease-in-out infinite; transform: scaleX(0); transform-origin: left; }*/
-.play-text { position: absolute; top: 33%; bottom: 33%; left: -5.25em; right: -5.25em; display: flex; align-items: center; justify-content: center; font-size: 1rem; z-index: 2; color: #000; background-color: #ffa666; border: 3px solid #000; animation: reverseSweep 3s ease-in-out infinite; transform: scaleX(0); transform-origin: right; overflow: hidden; filter: url(#pDistort); }
+.play-text { position: absolute; top: 33%; bottom: 33%; left: -5.25em; right: -5.25em; display: flex; align-items: center; justify-content: center; font-size: 1rem; z-index: 2; color: #000; background-color: #ffa666; /*border: 3px solid #000;*/ animation: reverseSweep 3s ease-in-out infinite; transform: scaleX(0); transform-origin: right; overflow: hidden; /*filter: url(#pDistort);*/ }
 @keyframes reverseSweep { 0% { transform-origin: right; transform: scaleX(0); } 33.333% { transform-origin: right; transform: scaleX(1); } 33.334% { transform-origin: left; transform: scaleX(1); } 66.666% { transform-origin: left; transform: scaleX(0); } 100% { transform-origin: left; transform: scaleX(0); } }
 /*
 .play-text { opacity: 0; animation: fullSweepFade 2s ease-in-out infinite; }
