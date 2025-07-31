@@ -24,7 +24,7 @@ body {
 	--color-text: #767676;
 	font-family: 'LEMONMILK-Regular', sans-serif;
 	min-height: 100vh;
-	color: #57585c;
+	color: #eee;
 	color: var(--color-text);
 	background-color: #fff;
 	background-color: var(--color-bg);
@@ -49,14 +49,6 @@ body::before { content: ''; position: fixed; top: -100%; left: -50%; width: 300%
 .socialsII{font-size: 4rem; font-family: 'Barett\ Street'; margin: 0 20px; transition: all 0.3s ease-in-out; user-select: none; -webkit-user-select: none;/* Safari */ -moz-user-select: none;/* Firefox */ -ms-user-select: none;/* IE/Edge */}
 .socials span {position: relative; z-index: 1; mix-blend-mode: difference;} /*.socials span::before {content: ''; position: absolute; z-index: -1; top: 10%; bottom: 50%; left: 1em; right: 0.5em; rotate: -45deg; background-color: #f1faee; transform-origin: center center; transform: scaleX(0); transition: transform 0.2s ease-in-out;}.socials span:hover::before { transform: scaleX(1); transform-origin: center center;}*/
 .socials span:hover .socialsII{filter: drop-shadow(0px 0px 5px #ffa666)}
-
-@keyframes loaderAnim {
-	to {
-		opacity: 1;
-		transform: scale3d(0.5,0.5,1);
-	}
-}
-
 
 a {
 	text-decoration: none;
@@ -271,3 +263,15 @@ a.content__text-link[data-fx="6"]:hover::after {
         overflow-x: hidden; /* Force prevent horizontal scroll */
     }
 }
+
+/* Loader CSS */
+.loading{display:flex;align-items:center;justify-content:center;position:fixed;top:0;right:0;bottom:0;left:0;z-index:100; background:#ffa666; opacity:0; transition:0.5s;}
+.loading::before { content: ''; position: fixed; top: -100%; left: -50%; width: 300%; height: 300%; background-image: url(../../assets/noise.png); opacity: 1; animation: grain 3s steps(10) infinite; }
+@keyframes grain { 0%, 100% { transform: translate(0, 0); } 10% { transform: translate(-5%, -10%); } 20% { transform: translate(-15%, 5%); } 30% { transform: translate(7%, -25%); } 40% { transform: translate(-5%, 25%); } 50% { transform: translate(-15%, 10%); } 60% { transform: translate(15%, 0%); } 70% { transform: translate(0%, 15%); } 80% { transform: translate(3%, 35%); } 90% { transform: translate(-10%, 10%); } }
+.before-load .loading{opacity:1;}
+.backp { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);color: #000; font-family: 'Morbid Bones Brush Slant DEMO','LEMONMILK-Regular','Roboto',sans-serif; font-size: 7rem; cursor: pointer; width: fit-content; filter: url(#minFilter); }
+.backp::before { content: ''; position: absolute; z-index: 1; top: 45%; bottom: 45%; left: -0.25em; right: -0.25em; background-color: #eee; border: 3px solid #000; filter: url(#minFilter); animation: fullSweep 2s ease-in-out infinite; }
+@keyframes fullSweep { 0% { transform-origin: left; transform: scaleX(0); } 33.333% { transform-origin: left; transform: scaleX(1); } 33.334% { transform-origin: right; transform: scaleX(1); } 66.666% { transform-origin: right; transform: scaleX(0); } 100% { transform-origin: right; transform: scaleX(0); } }
+@media (max-width:500px) { .backp { font-size: 3rem; } .backp::before {top: 33%; bottom: 33%;}}
+@font-face{font-family:'Morbid Bones Brush Slant DEMO';src:url('../../assets/Morbid\ Bones\ Brush\ Slant\ DEMO.ttf') format('truetype');font-display:swap;}
+.max-txt {position: absolute; top: 0; z-index: -1;}
