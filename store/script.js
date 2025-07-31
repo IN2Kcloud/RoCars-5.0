@@ -1,9 +1,15 @@
+window.addEventListener('load', () => {
+  document.body.classList.remove('before-load');
+});
+
+document.querySelector('.loading').addEventListener('transitionend', (e) => {
+  document.body.removeChild(e.currentTarget);
+});
+
 import { awards } from "./data.js";
 
 document.addEventListener("DOMContentLoaded", () => {
-  const lenis = new Lenis({
-    autoRaf: true,
-  });
+  const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
   const awardsListContainer = document.querySelector(".awards-list");
   const awardPreview = document.querySelector(".award-preview");
@@ -15,17 +21,12 @@ document.addEventListener("DOMContentLoaded", () => {
     TOP: -160,
   };
 
-  let lastMousePosition = { x: 0, y: 0 };
   let activeAward = null;
-  let ticking = false;
-  let mouseTimeout = null;
-  let isMouseMoving = false;
+  let visibleAward = null;
 
-  awards.forEach((award) => {
-    const awardElement = document.createElement("a");
+  awards.forEach((award, index) => {
+    const awardElement = document.createElement("div");
     awardElement.className = "award";
-    awardElement.href = `cars/${award.slug}/index.html`;
-    awardElement.target = "_blank";
 
     awardElement.innerHTML = `
       <div class="award-wrapper">
@@ -33,194 +34,264 @@ document.addEventListener("DOMContentLoaded", () => {
           <h1>${award.name}</h1>
           <h1>${award.type}</h1>
         </div>
-        <div class="award-project">
+        <a class="award-project" href="cars/${award.slug}/index.html" target="_blank">
           <h1>${award.project}</h1>
           <h1>${award.label}</h1>
-        </div>
+        </a>
         <div class="award-name">
           <h1>${award.name}</h1>
           <h1>${award.type}</h1>
         </div>
       </div>
     `;
-    
 
     awardsListContainer.appendChild(awardElement);
-  });
 
-  const awardsElements = document.querySelectorAll(".award");
+    const wrapper = awardElement.querySelector(".award-wrapper");
+    const projectLink = wrapper.querySelector(".award-project");
+    const awardNames = wrapper.querySelectorAll(".award-name");
 
-  const animatePreview = () => {
-    const awardsListRect = awardsList.getBoundingClientRect();
-    if (
-      lastMousePosition.x < awardsListRect.left ||
-      lastMousePosition.x > awardsListRect.right ||
-      lastMousePosition.y < awardsListRect.top ||
-      lastMousePosition.y > awardsListRect.bottom
-    ) {
-      const previewImages = awardPreview.querySelectorAll("img");
-      previewImages.forEach((img) => {
-        gsap.to(img, {
-          scale: 0,
-          duration: 0.4,
-          ease: "power2.out",
-          onComplete: () => img.remove(),
-        });
-      });
-    }
-  };
+    // === TOUCH DEVICES ONLY ===
+    if (isTouch) {
+      let hasBeenRevealed = false;
 
-  const updateAwards = () => {
-    animatePreview();
+      const showAward = () => {
+        // Hide previously visible award
+        if (visibleAward && visibleAward !== awardElement) {
+          const prevWrapper = visibleAward.querySelector(".award-wrapper");
+          gsap.to(prevWrapper, {
+            y: POSITIONS.TOP,
+            duration: 0.4,
+            ease: "power2.out",
+          });
+          awardPreview.innerHTML = '';
+          visibleAward.dataset.active = "false";
+        }
 
-    if (activeAward) {
-      const rect = activeAward.getBoundingClientRect();
-      const isStillOver =
-        lastMousePosition.x >= rect.left &&
-        lastMousePosition.x <= rect.right &&
-        lastMousePosition.y >= rect.top &&
-        lastMousePosition.y <= rect.bottom;
-
-      if (!isStillOver) {
-        const wrapper = activeAward.querySelector(".award-wrapper");
-        const leavingFromTop = lastMousePosition.y < rect.top + rect.height / 2;
-
-        gsap.to(wrapper, {
-          y: leavingFromTop ? POSITIONS.TOP : POSITIONS.BOTTOM,
-          duration: 0.4,
-          ease: "power2.out",
-        });
-        activeAward = null;
-      }
-    }
-
-    awardsElements.forEach((award, index) => {
-      if (award === activeAward) return;
-
-      const rect = award.getBoundingClientRect();
-      const isMouseOver =
-        lastMousePosition.x >= rect.left &&
-        lastMousePosition.x <= rect.right &&
-        lastMousePosition.y >= rect.top &&
-        lastMousePosition.y <= rect.bottom;
-
-      if (isMouseOver) {
-        const wrapper = award.querySelector(".award-wrapper");
-        const enterFromTop = lastMousePosition.y < rect.top + rect.height / 2;
-
+        // Show this one
         gsap.to(wrapper, {
           y: POSITIONS.MIDDLE,
           duration: 0.4,
           ease: "power2.out",
         });
-        activeAward = award;
-      }
-    });
 
-    ticking = false;
-  };
+        awardPreview.innerHTML = '';
+        const img = document.createElement("img");
+        img.src = `https://img.youtube.com/vi/${award.youtubeId}/hqdefault.jpg`;
+        img.style.position = "absolute";
+        img.style.top = 0;
+        img.style.left = 0;
+        img.style.scale = 0;
+        img.style.zIndex = 2;
 
-  document.addEventListener("mousemove", (e) => {
-    lastMousePosition.x = e.clientX;
-    lastMousePosition.y = e.clientY;
+        awardPreview.appendChild(img);
+        gsap.to(img, {
+          scale: 1,
+          duration: 0.4,
+          ease: "power2.out",
+        });
 
-    isMouseMoving = true;
-    if (mouseTimeout) {
-      clearTimeout(mouseTimeout);
+        visibleAward = awardElement;
+        awardElement.dataset.active = "true";
+        hasBeenRevealed = true;
+      };
+
+      awardNames.forEach((nameSection) => {
+        nameSection.addEventListener("click", (e) => {
+          e.preventDefault();
+          const alreadyVisible = awardElement.dataset.active === "true";
+
+          if (!alreadyVisible) {
+            showAward();
+          } else {
+            // now it's visible, so second tap triggers the link
+            const link = wrapper.querySelector(".award-project");
+            link.click();
+          }
+        });
+      });
+
+      // Touch outside = hide everything
+      document.addEventListener("touchstart", (e) => {
+        if (
+          visibleAward &&
+          !visibleAward.contains(e.target)
+        ) {
+          const prevWrapper = visibleAward.querySelector(".award-wrapper");
+          gsap.to(prevWrapper, {
+            y: POSITIONS.TOP,
+            duration: 0.4,
+            ease: "power2.out",
+          });
+          awardPreview.innerHTML = '';
+          visibleAward.dataset.active = "false";
+          visibleAward = null;
+        }
+      });
     }
+  });
 
-    const awardsListRect = awardsList.getBoundingClientRect();
-    const isInsideAwardsList =
-      lastMousePosition.x >= awardsListRect.left &&
-      lastMousePosition.x <= awardsListRect.right &&
-      lastMousePosition.y >= awardsListRect.top &&
-      lastMousePosition.y <= awardsListRect.bottom;
+  // === DESKTOP BEHAVIOR ===
+  if (!isTouch) {
+    const awardsElements = document.querySelectorAll(".award");
+    let lastMousePosition = { x: 0, y: 0 };
+    let ticking = false;
 
-    if (isInsideAwardsList) {
-      mouseTimeout = setTimeout(() => {
-        isMouseMoving = false;
-        const images = awardPreview.querySelectorAll("img");
-        if (images.length > 1) {
-          const lastImage = images[images.length - 1];
-          images.forEach((img) => {
-            if (img !== lastImage) {
-              gsap.to(img, {
-                scale: 0,
-                duration: 0.4,
-                ease: "power2.out",
-                onComplete: () => img.remove(),
-              });
-            }
+    const animatePreview = () => {
+      const awardsListRect = awardsList.getBoundingClientRect();
+      if (
+        lastMousePosition.x < awardsListRect.left ||
+        lastMousePosition.x > awardsListRect.right ||
+        lastMousePosition.y < awardsListRect.top ||
+        lastMousePosition.y > awardsListRect.bottom
+      ) {
+        const previewImages = awardPreview.querySelectorAll("img");
+        previewImages.forEach((img) => {
+          gsap.to(img, {
+            scale: 0,
+            duration: 0.4,
+            ease: "power2.out",
+            onComplete: () => img.remove(),
+          });
+        });
+      }
+    };
+
+    const updateAwards = () => {
+      animatePreview();
+
+      if (activeAward) {
+        const rect = activeAward.getBoundingClientRect();
+        const isStillOver =
+          lastMousePosition.x >= rect.left &&
+          lastMousePosition.x <= rect.right &&
+          lastMousePosition.y >= rect.top &&
+          lastMousePosition.y <= rect.bottom;
+
+        if (!isStillOver) {
+          const wrapper = activeAward.querySelector(".award-wrapper");
+          const leavingFromTop = lastMousePosition.y < rect.top + rect.height / 2;
+
+          gsap.to(wrapper, {
+            y: leavingFromTop ? POSITIONS.TOP : POSITIONS.BOTTOM,
+            duration: 0.4,
+            ease: "power2.out",
+          });
+          activeAward = null;
+        }
+      }
+
+      awardsElements.forEach((award, index) => {
+        if (award === activeAward) return;
+
+        const rect = award.getBoundingClientRect();
+        const isMouseOver =
+          lastMousePosition.x >= rect.left &&
+          lastMousePosition.x <= rect.right &&
+          lastMousePosition.y >= rect.top &&
+          lastMousePosition.y <= rect.bottom;
+
+        if (isMouseOver) {
+          const wrapper = award.querySelector(".award-wrapper");
+
+          gsap.to(wrapper, {
+            y: POSITIONS.MIDDLE,
+            duration: 0.4,
+            ease: "power2.out",
+          });
+          activeAward = award;
+
+          // ⬇️ Fix: Show preview immediately on hover
+          awardPreview.innerHTML = '';
+          const img = document.createElement("img");
+          img.src = `https://img.youtube.com/vi/${awards[index].youtubeId}/hqdefault.jpg`;
+          img.style.position = "absolute";
+          img.style.top = 0;
+          img.style.left = 0;
+          img.style.scale = 0;
+          img.style.zIndex = 2;
+
+          awardPreview.appendChild(img);
+          gsap.to(img, {
+            scale: 1,
+            duration: 0.4,
+            ease: "power2.out",
           });
         }
-      }, 2000);
-    }
+      });
 
-    animatePreview();
-  });
+      ticking = false;
+    };
 
-  document.addEventListener(
-    "scroll",
-    () => {
+    document.addEventListener("mousemove", (e) => {
+      lastMousePosition.x = e.clientX;
+      lastMousePosition.y = e.clientY;
       if (!ticking) {
-        requestAnimationFrame(() => {
-          updateAwards();
-        });
+        requestAnimationFrame(updateAwards);
         ticking = true;
       }
-    },
-    { passive: true }
-  );
+    });
 
-  awardsElements.forEach((award, index) => {
-    const wrapper = award.querySelector(".award-wrapper");
-    let currentPosition = POSITIONS.TOP;
+    document.addEventListener("scroll", () => {
+      if (!ticking) {
+        requestAnimationFrame(updateAwards);
+        ticking = true;
+      }
+    }, { passive: true });
 
-    award.addEventListener("mouseenter", (e) => {
-      activeAward = award;
-      const rect = award.getBoundingClientRect();
-      const enterFromTop = e.clientY < rect.top + rect.height / 2;
+    awardsElements.forEach((award, index) => {
+      const wrapper = award.querySelector(".award-wrapper");
+      let currentPosition = POSITIONS.TOP;
 
-      if (enterFromTop || currentPosition === POSITIONS.BOTTOM) {
-        currentPosition = POSITIONS.MIDDLE;
-        gsap.to(wrapper, {
-          y: POSITIONS.MIDDLE,
+      award.addEventListener("mouseenter", (e) => {
+        activeAward = award;
+        const rect = award.getBoundingClientRect();
+        const enterFromTop = e.clientY < rect.top + rect.height / 2;
+
+        if (enterFromTop || currentPosition === POSITIONS.BOTTOM) {
+          currentPosition = POSITIONS.MIDDLE;
+          gsap.to(wrapper, {
+            y: POSITIONS.MIDDLE,
+            duration: 0.4,
+            ease: "power2.out",
+          });
+        }
+
+        // Fix: show preview image on mouseenter
+        awardPreview.innerHTML = '';
+        const img = document.createElement("img");
+        img.src = `https://img.youtube.com/vi/${awards[index].youtubeId}/hqdefault.jpg`;
+        img.style.position = "absolute";
+        img.style.top = 0;
+        img.style.left = 0;
+        img.style.scale = 0;
+        img.style.zIndex = 2;
+
+        awardPreview.appendChild(img);
+        gsap.to(img, {
+          scale: 1,
           duration: 0.4,
           ease: "power2.out",
         });
-      }
+      });
 
-      const img = document.createElement("img");
-      img.src = `https://img.youtube.com/vi/${awards[index].youtubeId}/hqdefault.jpg`;
-      img.style.position = "absolute";
-      img.style.top = 0;
-      img.style.left = 0;
-      img.style.scale = 0;
-      img.style.zIndex = 2;
+      award.addEventListener("mouseleave", (e) => {
+        activeAward = null;
+        const rect = award.getBoundingClientRect();
+        const leavingFromTop = e.clientY < rect.top + rect.height / 2;
 
+        currentPosition = leavingFromTop ? POSITIONS.TOP : POSITIONS.BOTTOM;
+        gsap.to(wrapper, {
+          y: currentPosition,
+          duration: 0.4,
+          ease: "power2.out",
+        });
 
-      awardPreview.appendChild(img);
-
-      gsap.to(img, {
-        scale: 1,
-        duration: 0.4,
-        ease: "power2.out",
+        // remove preview on leave
+        awardPreview.innerHTML = '';
       });
     });
-
-    award.addEventListener("mouseleave", (e) => {
-      activeAward = null;
-      const rect = award.getBoundingClientRect();
-      const leavingFromTop = e.clientY < rect.top + rect.height / 2;
-
-      currentPosition = leavingFromTop ? POSITIONS.TOP : POSITIONS.BOTTOM;
-      gsap.to(wrapper, {
-        y: currentPosition,
-        duration: 0.4,
-        ease: "power2.out",
-      });
-    });
-  });
+  }
 });
 
 /* SERVICES */
