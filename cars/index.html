@@ -12,7 +12,13 @@
 		<link rel="stylesheet" type="text/css" href="css/base.css" />
 		<script>document.documentElement.className="js";var supportsCssVars=function(){var e,t=document.createElement("style");return t.innerHTML="root: { --tmp-var: bold; }",document.head.appendChild(t),e=!!(window.CSS&&window.CSS.supports&&window.CSS.supports("font-weight","var(--tmp-var)")),t.parentNode.removeChild(t),e};supportsCssVars()||alert("Please view this demo in a modern browser that supports CSS Variables.");</script>
 	</head>
-	<body class="loading">
+	<body class="before-load">
+	    <div class="loading">
+            <div class="loading-circle">
+                  <p class="backp">CARS !</p>
+            </div>
+        </div>
+
 		<main>
 			<div class="text-container">
 				<div class="socials">
@@ -111,21 +117,15 @@
 			</footer>
 		</main>
 
-		<svg style="display: none;">
-            <defs>
-              <filter id="pDistort">
-                <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="3" seed="2" stitchTiles="stitch" result="turb">
-                  <animate attributeName="seed" from="2" to="500" dur=".5s" repeatCount="indefinite" />
-                </feTurbulence>
-                <feDisplacementMap in="SourceGraphic" in2="turb" scale="10" xChannelSelector="R" yChannelSelector="G" />
-              </filter>
-              <filter id="pDistort-max">
-                <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="3" seed="2" stitchTiles="stitch" result="turb">
-                  <animate attributeName="seed" from="2" to="500" dur=".25s" repeatCount="indefinite" />
-                </feTurbulence>
-                <feDisplacementMap in="SourceGraphic" in2="turb" scale="33" xChannelSelector="R" yChannelSelector="G" />
-              </filter>
-            </defs>
+		<svg class="max-txt" viewBox="0 0 800 400" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <filter id="minFilter">
+              <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="3" seed="2" stitchTiles="stitch" result="turbulence1">
+          	    <animate attributeName="seed" from="2" to="50" dur="10s" repeatCount="indefinite" />
+              </feTurbulence>
+              <feDisplacementMap in="SourceGraphic" in2="turbulence1" scale="10" xChannelSelector="R" yChannelSelector="G" />
+            </filter>
+          </defs>
         </svg>
 
 		<script src="js/charming.min.js"></script>
