@@ -1,3 +1,11 @@
+window.addEventListener('load', () => {
+  document.body.classList.remove('before-load');
+});
+
+document.querySelector('.loading').addEventListener('transitionend', (e) => {
+  document.body.removeChild(e.currentTarget);
+});
+
 const container = document.querySelector(".container");
 const items = document.querySelector(".items");
 const indicator = document.querySelector(".indicator");
@@ -72,13 +80,52 @@ function getItemInIndicator() {
 }
 
 function updatePreviewImage(index) {
-  if (currentImageIndex !== index) {
-    currentImageIndex = index;
-    const targetItem = itemElements[index].querySelector("img");
-    const targetSrc = targetItem.getAttribute("src");
-    previewImage.setAttribute("src", targetSrc);
+  if (currentImageIndex === index) return;
+  currentImageIndex = index;
+
+  const targetItem = itemElements[index].querySelector("img");
+  const dataSrc = targetItem.dataset.src || targetItem.src;
+
+  const previewImg = document.querySelector(".img-preview img");
+  const previewVid = document.querySelector(".img-preview video");
+  const previewIframe = document.querySelector(".img-preview iframe");
+
+  // Hide all preview types
+  previewImg.style.display = "none";
+  previewVid.style.display = "none";
+  previewIframe.style.display = "none";
+
+  // Clear previous video/iframe sources
+  previewVid.pause();
+  previewVid.removeAttribute("src");
+  previewIframe.removeAttribute("src");
+
+  // Show appropriate preview
+  if (dataSrc.match(/\.(mp4|webm|ogg)$/)) {
+    previewVid.src = dataSrc;
+    previewVid.style.display = "block";
+    previewVid.load();
+    previewVid.play();
+  } else if (dataSrc.includes("youtube.com") || dataSrc.includes("youtu.be")) {
+    const videoId = extractYouTubeId(dataSrc);
+    if (videoId) {
+      previewIframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1`;
+      previewIframe.style.display = "block";
+    }
+  } else {
+    previewImg.src = dataSrc;
+    previewImg.style.display = "block";
   }
 }
+
+function extractYouTubeId(url) {
+  const regex = /(?:youtube\.com.*v=|youtu\.be\/)([^?&]+)/;
+  const match = url.match(regex);
+  return match ? match[1] : null;
+}
+
+updatePreviewImage(currentImageIndex);
+
 
 function animate() {
   const lerpFactor = isClickMove ? 0.05 : 0.075;
@@ -149,14 +196,19 @@ container.addEventListener(
 
 itemElements.forEach((item, index) => {
   item.addEventListener("click", () => {
+    // Update preview image directly
+    currentImageIndex = index;
+    updatePreviewImage(index);
+
+    // Optional: move indicator to that image (if you want it)
     isClickMove = true;
     targetTranslate =
       -index * dimensions.itemSize +
       (dimensions.indicatorSize - dimensions.itemSize) / 2;
-
     targetTranslate = Math.max(Math.min(targetTranslate, 0), -maxTranslate);
   });
 });
+
 
 window.addEventListener("resize", () => {
   dimensions = updateDimensions();
