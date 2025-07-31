@@ -11,7 +11,13 @@
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <script src="circletype.min.js"></script>
   </head>
-  <body>
+  <body class="before-load">
+    <div class="loading">
+      <div class="loading-circle">
+       <p class="backp">GARAGE !</p>
+      </div> 
+    </div>
+
   <div class="container">
     <section class="intro">
 
@@ -307,6 +313,17 @@
              <feTurbulence id="text-turbulence" type="turbulence" baseFrequency="0.02" numOctaves="2" result="turbulence" />
              <feDisplacementMap in="SourceGraphic" in2="turbulence" scale="10" xChannelSelector="R" yChannelSelector="G" />
           </filter>
+      </svg>
+
+	  <svg class="max-txt" viewBox="0 0 800 400" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <filter id="minFilter">
+            <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="3" seed="2" stitchTiles="stitch" result="turbulence1">
+        	    <animate attributeName="seed" from="2" to="50" dur="10s" repeatCount="indefinite" />
+            </feTurbulence>
+            <feDisplacementMap in="SourceGraphic" in2="turbulence1" scale="10" xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+        </defs>
       </svg>
 
   </body>
